@@ -6,13 +6,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
-
-  if (module.hot) {
-    module.hot.accept();
-    module.hot.dispose(() => app.close());
-  }
-
   app.useGlobalInterceptors(
     // class transformer
     new ClassSerializerInterceptor(app.get(Reflector)),
@@ -30,12 +23,17 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle(pck.name)
     .setDescription('Swagger api')
-    .setVersion(pck.name)
+    .setVersion(pck.version)
     .build();
   const document = SwaggerModule.createDocument(app, options);
 
   await SwaggerModule.setup('api', app, document);
 
-  await app.init();
+  await app.listen(process.env.PORT ?? 3000);
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 bootstrap();

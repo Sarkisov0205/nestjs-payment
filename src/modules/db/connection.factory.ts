@@ -2,9 +2,7 @@ import { Logger, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-
-import getAllEntities from '@/entities';
-import getAllMigrations from '@/migrations';
+import { getAllEntities, getAllMigrations } from '@/constant';
 
 type DbConnectionOptions = Omit<PostgresConnectionOptions, 'type'>;
 const LOGGER_PREFIX = '📥 DataSource';
@@ -12,7 +10,7 @@ const logger = new Logger(LOGGER_PREFIX);
 
 /**
  * Create connection to DB.
- * In case of failure, DB source config is removed from the cache and second retry is made.
+ * In case of failure, second retry is made.
  */
 export const connectionFactory = async (
   configService: ConfigService,

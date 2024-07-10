@@ -4,7 +4,7 @@ import { DataSource } from 'typeorm';
 import getAllEntities from '@/entities';
 import { DATA_SOURCE } from '@/modules/db/injection-token';
 import { getRepositoryToken } from '@/modules/db/utils/getRepositoryToken';
-import AppError from '@/utils/error/app.error';
+import AppError from '@/utils/app.error';
 
 export const repositoryProviderFactory: () => FactoryProvider[] = () => {
   return getAllEntities().map((repo) => ({

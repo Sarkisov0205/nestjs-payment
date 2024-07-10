@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
 import { DATA_SOURCE } from '@/modules/db/injection-token';
-import AppError from '@/utils/error/app.error';
+import AppError from '@/utils/app.error';
 
 @Injectable()
 export default class MigrationsService {
