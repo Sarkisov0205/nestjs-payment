@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
-import { DATA_SOURCE } from '@/modules/db/injection-token';
+import { DATA_SOURCE } from '@/core/db/injection-token';
 import AppError from '@/utils/app.error';
 
 @Injectable()

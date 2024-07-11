@@ -1,10 +1,4 @@
-import {
-  BaseEntity,
-  CreateDateColumn,
-  DeleteDateColumn,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { BaseEntity, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 export default abstract class AbstractEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -12,13 +6,4 @@ export default abstract class AbstractEntity extends BaseEntity {
 
   @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;
-
-  @UpdateDateColumn({ type: 'timestamptz' })
-  updated_at: Date;
-
-  @DeleteDateColumn({
-    type: 'timestamptz',
-    nullable: true,
-  })
-  deleted_at: Date;
 }

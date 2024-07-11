@@ -1,10 +1,9 @@
 import { FactoryProvider } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-
-import getAllEntities from '@/entities';
-import { DATA_SOURCE } from '@/modules/db/injection-token';
-import { getRepositoryToken } from '@/modules/db/utils/getRepositoryToken';
+import { DATA_SOURCE } from '@/core/db/injection-token';
+import { getRepositoryToken } from '@/core/db/utils/getRepositoryToken';
 import AppError from '@/utils/app.error';
+import { getAllEntities } from '@/constant';
 
 export const repositoryProviderFactory: () => FactoryProvider[] = () => {
   return getAllEntities().map((repo) => ({

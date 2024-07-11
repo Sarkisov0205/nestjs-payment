@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import DbModule from '@/modules/db/db.module';
+import { StoreModule } from '@/modules/store/store.module';
+import { PaymentModule } from '@/modules/payment/payment.module';
+import { DbModule } from '@/core/db/db.module';
 
 @Module({
   imports: [
@@ -9,6 +11,8 @@ import DbModule from '@/modules/db/db.module';
       isGlobal: true,
     }),
     DbModule.forRoot(),
+    StoreModule,
+    PaymentModule,
   ],
 })
 export class AppModule {}

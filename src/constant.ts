@@ -5,5 +5,5 @@ export const getAllEntities = importAll(
 );
 
 export const getAllMigrations = importAll(
-  require.context('./', false, /\d+-migration\.ts$/),
+  require.context('./', true, /\d+-migrations\.ts$/),
 );

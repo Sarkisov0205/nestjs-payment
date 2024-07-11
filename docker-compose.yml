@@ -8,14 +8,18 @@ services:
     build: .
     ports:
       - "$PORT:$PORT"
-    links:
+    depends_on:
       - db
+    volumes:
+      - ./:/usr/src/app
   db:
     image: postgres
     container_name: db
     restart: always
     environment:
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
     ports:
       - "5432:5432"
     volumes:
@@ -35,5 +39,5 @@ services:
     depends_on:
       - db
 volumes:
-  db:
+  postgres:
     driver: local

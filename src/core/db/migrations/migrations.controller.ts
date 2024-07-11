@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import MigrationsService from '@/modules/db/migrations/migrations.service';
+import MigrationsService from '@/core/db/migrations/migrations.service';
 
 @ApiTags('Migrations')
 @Controller('migrations')

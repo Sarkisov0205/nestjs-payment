@@ -18,7 +18,6 @@ export const connectionFactory = async (
 ): Promise<DataSource> => {
   try {
     const dataSourceConfig = dataSourceConfigFactory(configService);
-
     const dataSource = new DataSource(dataSourceConfig);
     await dataSource.initialize();
 
@@ -40,14 +39,12 @@ export const connectionFactory = async (
 function getDbConnectionOptions(
   configService: ConfigService,
 ): DbConnectionOptions {
-  const host = configService.getOrThrow('DB_HOST');
   const port = configService.getOrThrow('DB_PORT');
   const username = configService.getOrThrow('DB_USERNAME');
   const password = configService.getOrThrow('DB_PASSWORD');
   const database = configService.getOrThrow('DB_DATABASE');
 
   return {
-    host,
     username,
     password,
     database,
@@ -58,11 +55,12 @@ function getDbConnectionOptions(
 function dataSourceConfigFactory(
   configService: ConfigService,
 ): DataSourceOptions {
-  const { host, username, password, database, port } =
+  const { username, password, database, port } =
     getDbConnectionOptions(configService);
+
   return {
     type: 'postgres',
-    host,
+    host: 'db',
     port,
     username,
     password,
