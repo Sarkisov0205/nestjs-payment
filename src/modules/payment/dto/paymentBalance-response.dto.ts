@@ -3,7 +3,7 @@ import { PAYMENT_STATUSES } from '@/modules/payment/types';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Exclude()
-export class PaymentTransactionResponseDto {
+export class PaymentBalanceResponseDto {
   @Expose()
   @ApiProperty()
   id: string;
@@ -30,5 +30,9 @@ export class PaymentTransactionResponseDto {
 
   @Expose()
   @ApiProperty()
-  tempHoldD: number;
+  left: number;
+
+  @Expose()
+  @ApiProperty()
+  payed: number;
 }

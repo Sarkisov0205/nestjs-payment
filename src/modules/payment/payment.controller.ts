@@ -6,6 +6,7 @@ import {
   Param,
   HttpCode,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { PaymentService } from './data/payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
@@ -14,8 +15,9 @@ import { PaymentResponse } from '@/modules/payment/dto/payment-response';
 import { plainToInstance } from 'class-transformer';
 import { PaymentSetStatusParamsDto } from '@/modules/payment/dto/payment-setStatus-params.dto';
 import { PaymentProcessService } from '@/modules/payment/services/paymentProcess.service';
-import { PaymentTransactionResponseDto } from '@/modules/payment/dto/paymentTransaction-response.dto';
-import { PaymentTransactionService } from '@/modules/payment/data/paymentTransaction.service';
+import { PaymentBalanceResponseDto } from '@/modules/payment/dto/paymentBalance-response.dto';
+import { PaymentBalanceService } from '@/modules/payment/data/paymentBalance.service';
+import { NewPaymentGuard } from '@/modules/payment/guards/newPayment.guard';
 
 @ApiTags('Payment')
 @Controller('payment')
@@ -23,10 +25,11 @@ export class PaymentController {
   constructor(
     private paymentService: PaymentService,
     private paymentProcessService: PaymentProcessService,
-    private paymentTransactionService: PaymentTransactionService,
+    private paymentBalanceService: PaymentBalanceService,
   ) {}
 
   @Post()
+  @UseGuards(NewPaymentGuard)
   @HttpCode(201)
   @ApiResponse({
     status: 201,
@@ -34,9 +37,7 @@ export class PaymentController {
     type: String,
   })
   async create(@Body() createPaymentDto: CreatePaymentDto) {
-    const entity = await this.paymentService.create(createPaymentDto);
-    await this.paymentProcessService.setNewStatus(entity);
-    return entity.id;
+    return this.paymentProcessService.newPayment(createPaymentDto);
   }
 
   @Patch('processed')
@@ -72,20 +73,19 @@ export class PaymentController {
     return plainToInstance(PaymentResponse, this.paymentService.findOne(id));
   }
 
-  @Get(':id/transaction')
+  @Get(':id/balance')
   @HttpCode(200)
   @ApiResponse({
     status: 200,
-    description: 'Return payment transaction history',
-    type: PaymentTransactionResponseDto,
-    isArray: true,
+    description: 'Return payment balance',
+    type: PaymentBalanceResponseDto,
   })
-  async getPaymentTransaction(
+  async getPaymentBalance(
     @Param('id') id: string,
-  ): Promise<PaymentTransactionResponseDto[]> {
+  ): Promise<PaymentBalanceResponseDto> {
     return plainToInstance(
-      PaymentTransactionResponseDto,
-      await this.paymentTransactionService.getPaymentTransactions(id),
+      PaymentBalanceResponseDto,
+      await this.paymentBalanceService.getPaymentBalance(id),
     );
   }
 }

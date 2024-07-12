@@ -2,23 +2,28 @@ import { Module } from '@nestjs/common';
 import { PaymentService } from './data/payment.service';
 import { PaymentController } from './payment.controller';
 import { PaymentProcessService } from '@/modules/payment/services/paymentProcess.service';
-import { PaymentTransactionService } from '@/modules/payment/data/paymentTransaction.service';
+import { PaymentBalanceService } from '@/modules/payment/data/paymentBalance.service';
 import { CommissionConfig } from '@/modules/payment/constant';
 import { ConfigService } from '@nestjs/config';
+import { PaymentCalcService } from '@/modules/payment/services/paymentCalc.service';
 
 @Module({
   controllers: [PaymentController],
   providers: [
     PaymentService,
+    PaymentBalanceService,
     PaymentProcessService,
-    PaymentTransactionService,
-    PaymentProcessService,
+    PaymentCalcService,
     {
       provide: CommissionConfig,
       useFactory: (configService: ConfigService) => {
-        const commissionA = configService.getOrThrow('COMMISSION_A');
-        const commissionB = configService.getOrThrow('COMMISSION_B');
-        const tempOnHoldD = configService.getOrThrow('TEMP_ON_HOLD_D');
+        const commissionA = parseInt(configService.getOrThrow('COMMISSION_A'));
+        const commissionB = parseFloat(
+          configService.getOrThrow('COMMISSION_B'),
+        );
+        const tempOnHoldD = parseFloat(
+          configService.getOrThrow('TEMP_ON_HOLD_D'),
+        );
         return {
           commissionA,
           commissionB,
@@ -28,5 +33,6 @@ import { ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     },
   ],
+  exports: [PaymentBalanceService, PaymentService],
 })
 export class PaymentModule {}

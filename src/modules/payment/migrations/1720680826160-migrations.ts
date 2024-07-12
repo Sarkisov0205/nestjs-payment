@@ -10,8 +10,6 @@ export class Migrations1720680826160 implements MigrationInterface {
       {
         name: 'amount',
         type: 'decimal',
-        precision: 5,
-        scale: 2,
         isNullable: false,
       },
       {

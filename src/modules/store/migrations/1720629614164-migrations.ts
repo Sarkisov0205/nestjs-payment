@@ -16,8 +16,6 @@ export class Migrations1720629614164 implements MigrationInterface {
       {
         name: 'commission',
         type: 'decimal',
-        precision: 5,
-        scale: 2,
         isNullable: false,
       },
       {

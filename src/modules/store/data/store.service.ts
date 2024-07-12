@@ -1,6 +1,5 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateStoreDto } from '../dto/create-store.dto';
-import { UpdateStoreDto } from '../dto/update-store.dto';
 import { Store } from '@/modules/store/entities/store.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@/core/db/utils/decorators';
@@ -20,16 +19,6 @@ export class StoreService implements StoreDataAccess {
 
   async findOne(id: string): Promise<Store> {
     return this.findOneOrFail(id);
-  }
-
-  async update(id: string, updateStoreDto: UpdateStoreDto): Promise<void> {
-    const entity = await this.findOneOrFail(id);
-    const updated = this.repo.create({
-      ...entity,
-      ...updateStoreDto,
-    });
-
-    await this.repo.save(updated);
   }
 
   private findOneOrFail(id: string) {

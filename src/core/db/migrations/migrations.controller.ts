@@ -8,9 +8,6 @@ import MigrationsService from '@/core/db/migrations/migrations.service';
 export default class MigrationsController {
   constructor(private migrationsService: MigrationsService) {}
 
-  /**
-   * @deprecated use /launch instead
-   */
   @ApiResponse({
     status: 200,
     description: 'Run all pending migrations',
@@ -20,17 +17,10 @@ export default class MigrationsController {
     await this.migrationsService.runMigrations();
   }
 
-  /**
-   * @deprecated
-   */
   @ApiResponse({
     status: 200,
     description: 'Run all pending migrations',
   })
-
-  /**
-   * @deprecated
-   */
   @ApiResponse({
     status: 200,
     type: Boolean,
@@ -40,7 +30,6 @@ export default class MigrationsController {
   async getMigrationsStatus(): Promise<boolean> {
     return await this.migrationsService.getMigrationsStatus();
   }
-
   @ApiResponse({
     status: 200,
     description: 'Revert last migration',

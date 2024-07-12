@@ -1,6 +1,6 @@
 import { CreateStoreDto } from '@/modules/store/dto/create-store.dto';
 import { Store } from '@/modules/store/entities/store.entity';
-import { UpdateStoreDto } from '@/modules/store/dto/update-store.dto';
+import { StorePayoutDto } from '@/modules/store/dto/store-payout.dto';
 
 export interface StoreContract {
   name: string;
@@ -10,5 +10,9 @@ export interface StoreContract {
 export interface StoreDataAccess {
   create(createStoreDto: CreateStoreDto): Promise<string>;
   findOne(id: string): Promise<Store>;
-  update(id: string, updateStoreDto: UpdateStoreDto): Promise<void>;
+}
+
+export interface StorePayoutServiceContract {
+  getStoreBalance(id: string): Promise<number>;
+  storePayout(id: string): Promise<StorePayoutDto[]>;
 }

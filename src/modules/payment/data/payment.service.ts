@@ -1,9 +1,14 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePaymentDto } from '../dto/create-payment.dto';
 import { InjectRepository } from '@/core/db/utils/decorators';
 import { Payment } from '@/modules/payment/entities/payment.entity';
 import { Repository } from 'typeorm';
-import { PaymentDataAccess } from '@/modules/payment/types';
+import { PAYMENT_STATUSES, PaymentDataAccess } from '@/modules/payment/types';
 
 @Injectable()
 export class PaymentService implements PaymentDataAccess {
@@ -32,6 +37,10 @@ export class PaymentService implements PaymentDataAccess {
     return this.findOneOrFail(id, withRelatedEntity);
   }
 
+  async update(id: string, status: PAYMENT_STATUSES): Promise<void> {
+    await this.repo.update({ id }, { status });
+  }
+
   private findOneOrFail(
     id: string,
     withRelatedEntity = false,
@@ -40,7 +49,7 @@ export class PaymentService implements PaymentDataAccess {
       return this.repo.findOneOrFail({
         where: { id },
         ...(withRelatedEntity && {
-          relations: { store: true },
+          relations: { store: true, paymentBalance: true },
         }),
       });
     } catch (e) {

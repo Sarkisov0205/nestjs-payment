@@ -1,27 +1,20 @@
 import AbstractEntity from '@/core/entities/abstract-entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { PAYMENT_STATUSES } from '@/modules/payment/types';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { Payment } from '@/modules/payment/entities/payment.entity';
 import { NumericTransformer } from '@/utils/transformer/numericTransformer';
+import { PaymentBalanceParam } from '@/modules/payment/types';
 
-@Entity({ name: 'payment_transaction' })
-export class PaymentTransactionsEntity extends AbstractEntity {
-  @Column({
-    type: 'enum',
-    enum: Object.values(PAYMENT_STATUSES),
-    nullable: false,
-    default: PAYMENT_STATUSES.new,
-  })
-  status: PAYMENT_STATUSES;
-
-  @ManyToOne(() => Payment, (ent) => ent.paymentTransactions)
+@Entity({ name: 'payment_balance' })
+export class PaymentBalanceEntity
+  extends AbstractEntity
+  implements PaymentBalanceParam
+{
+  @OneToOne(() => Payment, (ent) => ent.paymentBalance)
   @JoinColumn({ name: 'payment' })
   payment: Payment;
 
   @Column({
     type: 'decimal',
-    precision: 5,
-    scale: 2,
     nullable: false,
     transformer: new NumericTransformer(),
   })
@@ -29,8 +22,6 @@ export class PaymentTransactionsEntity extends AbstractEntity {
 
   @Column({
     type: 'decimal',
-    precision: 5,
-    scale: 2,
     nullable: false,
     transformer: new NumericTransformer(),
   })
@@ -38,8 +29,6 @@ export class PaymentTransactionsEntity extends AbstractEntity {
 
   @Column({
     type: 'decimal',
-    precision: 5,
-    scale: 2,
     nullable: false,
     transformer: new NumericTransformer(),
   })
@@ -47,10 +36,22 @@ export class PaymentTransactionsEntity extends AbstractEntity {
 
   @Column({
     type: 'decimal',
-    precision: 5,
-    scale: 2,
     nullable: false,
     transformer: new NumericTransformer(),
   })
   tempHoldD: number;
+
+  @Column({
+    type: 'decimal',
+    nullable: false,
+    transformer: new NumericTransformer(),
+  })
+  payed: number;
+
+  @Column({
+    type: 'decimal',
+    nullable: false,
+    transformer: new NumericTransformer(),
+  })
+  amountToPay: number;
 }

@@ -21,8 +21,7 @@ export class Store extends AbstractEntity implements StoreContract {
   name: string;
 
   @Column({
-    type: 'real',
-    precision: 2,
+    type: 'decimal',
     nullable: false,
     transformer: new NumericTransformer(),
   })

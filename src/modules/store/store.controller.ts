@@ -1,23 +1,19 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, HttpCode } from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
-import { UpdateStoreDto } from './dto/update-store.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StoreResponseDto } from '@/modules/store/dto/store-response.dto';
 import { plainToInstance } from 'class-transformer';
 import { StoreService } from '@/modules/store/data/store.service';
+import { StorePayoutService } from '@/modules/store/services/storePayout.service';
+import { StorePayoutDto } from '@/modules/store/dto/store-payout.dto';
 
 @ApiTags('Store')
 @Controller('store')
 export class StoreController {
-  constructor(private readonly storeService: StoreService) {}
+  constructor(
+    private readonly storeService: StoreService,
+    private readonly storePayoutService: StorePayoutService,
+  ) {}
 
   @Post()
   @HttpCode(201)
@@ -44,9 +40,29 @@ export class StoreController {
     );
   }
 
-  @Patch(':id')
+  @Get(':id/balance')
   @HttpCode(200)
-  update(@Param('id') id: string, @Body() updateStoreDto: UpdateStoreDto) {
-    return this.storeService.update(id, updateStoreDto);
+  @ApiResponse({
+    status: 200,
+    description: 'Get balance for current store',
+    type: StoreResponseDto,
+  })
+  getStoreBalance(@Param('id') id: string) {
+    return this.storePayoutService.getStoreBalance(id);
+  }
+
+  @Get(':id/payout')
+  @HttpCode(200)
+  @ApiResponse({
+    status: 200,
+    description: 'Do payout for current store',
+    type: StorePayoutDto,
+    isArray: true,
+  })
+  storePayout(@Param('id') id: string) {
+    return plainToInstance(
+      StorePayoutDto,
+      this.storePayoutService.storePayout(id),
+    );
   }
 }

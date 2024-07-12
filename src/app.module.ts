@@ -7,7 +7,6 @@ import { DbModule } from '@/core/db/db.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env',
       isGlobal: true,
     }),
     DbModule.forRoot(),
